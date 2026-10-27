@@ -2,13 +2,27 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { textos } from "./tema";
 
+const CLAVE = "moodify_usuario";
+
+// Lee el usuario guardado. Si falla o no hay nada, devuelve texto vacío.
+function leerGuardado(): string {
+  try {
+    return localStorage.getItem(CLAVE) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 type Props = {
   onEntrar: (usuario: string) => void;
 };
 
 function Login({ onEntrar }: Props) {
-  const [usuario, setUsuario] = useState("");
+  const guardado = leerGuardado();
+
+  const [usuario, setUsuario] = useState(guardado);
   const [password, setPassword] = useState("");
+  const [recordar, setRecordar] = useState(guardado !== "");
   const [error, setError] = useState("");
 
   const manejarLogin = (e: FormEvent<HTMLFormElement>) => {
@@ -18,6 +32,18 @@ function Login({ onEntrar }: Props) {
       return;
     }
     setError("");
+
+    // Guardar o borrar el usuario según la casilla
+    try {
+      if (recordar) {
+        localStorage.setItem(CLAVE, usuario.trim());
+      } else {
+        localStorage.removeItem(CLAVE);
+      }
+    } catch {
+      // Si el navegador no permite guardar, seguimos sin guardar
+    }
+
     onEntrar(usuario.trim());
   };
 
@@ -25,6 +51,7 @@ function Login({ onEntrar }: Props) {
     <div>
       <p className="logo">{textos.nombreApp}</p>
       <h1 className="titulo">{textos.tituloLogin}</h1>
+      <p className="subtitulo">{textos.subtituloMenu}</p>
 
       {error && <div className="error-msg">{error}</div>}
 
@@ -52,6 +79,15 @@ function Login({ onEntrar }: Props) {
             placeholder={textos.placeholderPassword}
           />
         </div>
+
+        <label className="recordar">
+          <input
+            type="checkbox"
+            checked={recordar}
+            onChange={(e) => setRecordar(e.target.checked)}
+          />
+          {textos.recordarme}
+        </label>
 
         <button type="submit" className="boton-principal boton-ancho">
           {textos.botonEntrar}

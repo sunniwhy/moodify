@@ -57,6 +57,7 @@ etiquetaPassword: "Contraseña:",
 placeholderPassword: "****",
 botonEntrar: "Iniciar sesión",
 errorCampos: "Por favor llena todos los campos.",
+recordarme: "Recordarme en este navegador",
 };
 
 // ---------- 5. SERVICIOS DE MÚSICA ----------
