@@ -4,7 +4,6 @@ import { textos } from "./tema";
 
 const CLAVE = "moodify_usuario";
 
-// Lee el usuario guardado. Si falla o no hay nada, devuelve texto vacío.
 function leerGuardado(): string {
   try {
     return localStorage.getItem(CLAVE) ?? "";
@@ -33,7 +32,6 @@ function Login({ onEntrar }: Props) {
     }
     setError("");
 
-    // Guardar o borrar el usuario según la casilla
     try {
       if (recordar) {
         localStorage.setItem(CLAVE, usuario.trim());
